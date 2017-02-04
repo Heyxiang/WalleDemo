@@ -1,0 +1,10 @@
+anzhi #安智
+baidu #百度
+huawei #华为
+oppo #oppo
+wdj #豌豆荚
+xiaomi #小米
+yyb #应用宝
+
+# 1、打包文件内的渠道包：gradle assembleProductRelease -PchannelFile=channel
+# 2、打包数组内的渠道包：gradle assembleProductRelease -PchannelList=qihu,vivo,lenovo

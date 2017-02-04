@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+apply plugin: 'walle'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
+            storeFile rootProject.file(KEYSTORE_FILE)
+            storePassword KEYSTORE_PASSWORD
+        }
+    }
+
+    buildTypes {
+        //调试版本，无混淆
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+        //发布版本，有混淆
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        //开发环境
+        develop {
+            buildConfigField "int", "ENV_TYPE", "1"
+            applicationId 'om.soubu.walledemo.develop'
+            manifestPlaceholders = [
+                    app_name: "开-WalleDemo",
+                    app_icon: "@drawable/icon_develop"
+            ]
+        }
+        //测试环境
+        check {
+            buildConfigField "int", "ENV_TYPE", "2"
+            applicationId 'om.soubu.walledemo.check'
+            manifestPlaceholders = [
+                    app_name: "测-WalleDemo",
+                    app_icon: "@drawable/icon_check"
+            ]
+        }
+        //生产环境
+        product {
+            buildConfigField "int", "ENV_TYPE", "3"
+            applicationId 'com.soubu.walledemo.product'
+            manifestPlaceholders = [
+                    app_name: "WalleDemo",
+                    app_icon: "@drawable/icon_product"
+            ]
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.meituan.android.walle:library:1.0.3'
+}
